@@ -1,21 +1,20 @@
 version: 2.1
 
 jobs:
-  build:
+  dump-env:
     docker:
       - image: cimg/base:current
     steps:
       - run:
-          name: Create Artifact Files
+          name: Dump Environment Variables
           command: |
             mkdir /tmp/artifacts
-            echo "This is a test artifact file." > /tmp/artifacts/artifact-1.txt
-            echo "Another file here." > /tmp/artifacts/artifact-2.txt
+            printenv > /tmp/artifacts/env-vars.txt
       - store_artifacts:
           path: /tmp/artifacts
-          destination: build-artifacts
+          destination: env-vars-artifacts
 
 workflows:
-  create-artifact-workflow:
+  dump-env-workflow:
     jobs:
-      - build
+      - dump-env
