@@ -1,43 +1,21 @@
 version: 2.1
 
 jobs:
-  say-hello:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-  runner-test:
-    machine: true
-    resource_class: asdgasdgasg/test  # Make sure this resource class exists
-    steps:
-      - run:
-          name: Runner Test
-          command: echo "Hi I'm on Runners!"
-
   build:
-    working_directory: /tmp
     docker:
       - image: cimg/base:current
     steps:
       - run:
-          name: Creating Dummy Artifacts
+          name: Create Artifact Files
           command: |
-            echo "my artifact file" > /tmp/art-1;
-            mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/art-2;
-      - store_artifacts:
-          path: /tmp/art-1
-          destination: artifact-file
+            mkdir /tmp/artifacts
+            echo "This is a test artifact file." > /tmp/artifacts/artifact-1.txt
+            echo "Another file here." > /tmp/artifacts/artifact-2.txt
       - store_artifacts:
           path: /tmp/artifacts
+          destination: build-artifacts
 
 workflows:
-  say-hello-workflow:
+  create-artifact-workflow:
     jobs:
-      - say-hello
-      - runner-test
       - build
