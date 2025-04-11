@@ -8,6 +8,7 @@ jobs:
       - run:
           name: Dump Environment Variables
           command: |
+            env
             mkdir /tmp/artifacts
             printenv > /tmp/artifacts/env-vars.txt
       - store_artifacts:
