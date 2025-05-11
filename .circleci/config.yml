@@ -1,41 +1,21 @@
 version: 2.1
+
 jobs:
-  say-hello:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!1111111111111111111111"
-  runner-test:
-    machine: true
-    resource_class: asdgasdgasg/test
-    steps:
-      - run: echo "Hi I'm on Runners!"
-  build:
-    working_directory: /tmp
+  dump-env:
     docker:
       - image: cimg/base:current
     steps:
       - run:
-          name: Creating Dummy Artifacts
+          name: Dump Environment Variables
           command: |
-            echo "my artifact file" > /tmp/art-1;
-            mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/art-2;
-      - store_artifacts:
-          path: /tmp/art-1
-          destination: artifact-file
+            env
+            mkdir /tmp/artifacts
+            printenv > /tmp/artifacts/env-vars.txt
       - store_artifacts:
           path: /tmp/artifacts
+          destination: env-vars-artifacts
+
 workflows:
-  say-hello-workflow:
+  dump-env-workflow:
     jobs:
-      - say-hello
-  testing:
-    jobs:
-      - runner-test
-  build-artifacts:
-    jobs:
-      - build
+      - dump-env
